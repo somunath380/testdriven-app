@@ -1,32 +1,25 @@
 import os
-import datetime
-from flask import Flask, jsonify
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
+from project.api.users import users_blueprint
 
-app = Flask(__name__)
+class Base(DeclarativeBase):
+    pass
 
-# SETTING CONFIG HERE
-app_settings = os.getenv("APP_SETTINGS")
-app.config.from_object(app_settings)
 
 #INSTANTIATING THE DB HERE
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
-class User(db.Model):
-    __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(128), nullable=False)
-    active = db.Column(db.Boolean(), default=True, nullable=False)
-
-    def __init__(self, username, email):
-        self.username = username
-        self.email = email
-
-@app.route("/users/ping") # methods by default is Get
-def ping_pong():
-    return jsonify({
-        "status": "success",
-        "message": "pong!"
-    })
+def create_app(script_info=None):
+    app = Flask(__name__)
+    # SETTING CONFIG HERE
+    app_settings = os.getenv("APP_SETTINGS")
+    app.config.from_object(app_settings)
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+    app.register_blueprint(users_blueprint)
+    app.shell_context_processor({'app': app, 'db': db})
+    return app
 

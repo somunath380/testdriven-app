@@ -1,5 +1,5 @@
 FROM postgres
 
 # run create.sql on init
-ADD create.sql /docker-entrypoint-initdb.d
+ADD create.sql /docker-entrypoint-initdb.d/
 
