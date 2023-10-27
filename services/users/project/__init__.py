@@ -1,15 +1,8 @@
 import os
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from project.api.models import db
 from project.api.users import users_blueprint
 
-class Base(DeclarativeBase):
-    pass
-
-
-#INSTANTIATING THE DB HERE
-db = SQLAlchemy()
 
 def create_app(script_info=None):
     app = Flask(__name__)

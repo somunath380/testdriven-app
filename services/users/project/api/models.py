@@ -1,6 +1,11 @@
-from project import db
+# from project import db
 from sqlalchemy.orm import mapped_column, Mapped
 from sqlalchemy import Integer, String, Boolean
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
+
+
+db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__ = "users"
